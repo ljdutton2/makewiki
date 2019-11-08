@@ -2,7 +2,7 @@ from django.shortcuts import render
 from wiki.models import Page
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-
+from django.http import HttpResponse
 
 class PageList(ListView):
     """
@@ -11,11 +11,12 @@ class PageList(ListView):
       2. Replace this CHALLENGE text with a descriptive docstring for PageList.
       3. Replace pass below with the code to render a template named `list.html`.
     """
-    model = Page
+    Model = Page
 
-    def get(self, request):
-        """ Returns a list of wiki pages. """
-        pass
+    def get(self,request):
+      pages=Page.objects.all()
+      return render(request, 'wiki/page-list.html', {'all_pages_list': pages })
+
 
 
 class PageDetailView(DetailView):
@@ -39,7 +40,11 @@ class PageDetailView(DetailView):
 
     def get(self, request, slug):
         """ Returns a specific of wiki page by slug. """
-        pass
+        page = Page.objects.get(slug=slug)
+        context = {
+          "page": page
+        }
+        return render(request,"wiki/page-detail.html", context)
 
     def post(self, request, slug):
         pass
